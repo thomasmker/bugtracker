@@ -1,5 +1,6 @@
 package com.thomashayashi.bugtracker.controller;
 
+import com.thomashayashi.bugtracker.controller.dto.BugDto;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,18 @@ public class BugsControllerTest {
                 .andExpect(MockMvcResultMatchers
                         .status()
                         .is(200));
+    }
+
+    @Test
+    public void whenBugAPICalled_ThenShouldReturnBugInformation() throws Exception {
+        URI uri = new URI("/bugs");
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get(uri))
+                .andExpect(MockMvcResultMatchers
+                        .status().isOk())
+                .andExpect(MockMvcResultMatchers
+                        .content()
+                        .string("[{\"id\":1,\"title\":\"a\",\"description\":\"b\"},{\"id\":1,\"title\":\"a\",\"description\":\"b\"}]"));
     }
 }
