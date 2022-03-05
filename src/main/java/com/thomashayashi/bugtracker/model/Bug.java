@@ -6,7 +6,6 @@ public class Bug {
     private String title;
     private String description;
     private LocalDateTime creationDate = LocalDateTime.now();
-    private BugStatus status = BugStatus.OPEN;
 
     public String getTitle() {
         return title;
@@ -30,13 +29,5 @@ public class Bug {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public BugStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(BugStatus status) {
-        this.status = status;
     }
 }
