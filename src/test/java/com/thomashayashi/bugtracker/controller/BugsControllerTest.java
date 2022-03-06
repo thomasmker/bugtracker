@@ -33,29 +33,29 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenBugAPIGETIsCalled_ThenShouldReturnStatus200() throws Exception {
+    public void whenGetIsCalled_ThenShouldReturnOk() throws Exception {
         mockMvc.perform(get(uri)).andExpect(status().isOk());
     }
 
     @Test
-    public void whenBugAPIGETIsCalled_ThenReturnShouldBeEncodedInISO88591() throws Exception {
+    public void whenGetIsCalled_ThenReturnShouldBeEncodedInISO88591() throws Exception {
         mockMvc.perform(get(uri)).andExpect(content().encoding("ISO-8859-1"));
     }
 
     @Test
-    public void whenBugAPIGETIsCalled_ThenShouldReturnListOfBugs() throws Exception {
+    public void whenGetIsCalled_ThenShouldReturnListOfBugs() throws Exception {
         mockMvc.perform(get(uri))
                 .andExpect(content().string("[{\"id\":1,\"title\":\"a\"},{\"id\":1,\"title\":\"a\"}]"));
     }
 
     @Test
-    public void whenCallingBugAPIGETWithInvalidID_ThenShouldReturnNotFound() throws Exception {
+    public void whenGetIsCalledWithInvalidID_ThenShouldReturnNotFound() throws Exception {
         URI uri = new URI("/bugs/-1");
         mockMvc.perform(get(uri)).andExpect(status().isNotFound());
     }
 
     @Test
-    public void whenCallingBugAPIGETWithValidID_ThenShouldReturnTheBugWithThatID() throws Exception {
+    public void whenGetIsCalledWithValidID_ThenShouldReturnTheBugWithThatID() throws Exception {
         URI uri = new URI("/bugs/1");
 
         mockMvc.perform(get(uri))
@@ -64,24 +64,24 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenCallingBugAPIDELETEWithInvalidID_ThenShouldReturnNotFound() throws Exception {
+    public void whenDeleteIsCalledWithInvalidID_ThenShouldReturnNotFound() throws Exception {
         URI uri = new URI("/bugs/-1");
         mockMvc.perform(delete(uri)).andExpect(status().isNotFound());
     }
 
     @Test
-    public void whenCallingBugAPIDELETEWithValidID_ThenShouldReturnOK() throws Exception {
+    public void whenDeleteIsCalledWithValidID_ThenShouldReturnOK() throws Exception {
         URI uri = new URI("/bugs/1");
         mockMvc.perform(delete(uri)).andExpect(status().isOk());
     }
 
     @Test
-    public void whenCallingBugAPIPOSTWithNoData_ThenShouldReturnBadRequest() throws Exception {
+    public void whenPostIsCalledWithNoData_ThenShouldReturnBadRequest() throws Exception {
         mockMvc.perform(post(uri)).andExpect(status().isBadRequest());
     }
 
     @Test
-    public void whenCallingBugAPIPOSTWithValidData_ThenShouldReturnCreated() throws Exception {
+    public void whenPostIsCalledWithValidData_ThenShouldReturnCreated() throws Exception {
         mockMvc.perform(post(uri)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(BugFormMock.getBugForm())
@@ -89,7 +89,7 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenCallingBugAPIPOSTWithValidData_ThenShouldReturnCreatedBugInfo() throws Exception {
+    public void whenPostIsCalledWithValidData_ThenShouldReturnCreatedBugInfo() throws Exception {
         mockMvc.perform(post(uri)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(BugFormMock.getBugForm()))
@@ -97,7 +97,7 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenCallingBugAPIPOSTWithValidData_ThenShouldReturnCreatedBugURL() throws Exception {
+    public void whenPostIsCalledWithValidData_ThenShouldReturnCreatedBugURL() throws Exception {
         mockMvc.perform(post(uri)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(BugFormMock.getBugForm()))
@@ -105,13 +105,13 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenCallingBugAPIPUTWithNoData_ThenShouldReturnBadRequest() throws Exception {
+    public void whenPutIsCalledWithNoData_ThenShouldReturnBadRequest() throws Exception {
         URI uri = new URI("/bugs/1");
         mockMvc.perform(put(uri)).andExpect(status().isBadRequest());
     }
 
     @Test
-    public void whenCallingBugAPIPUTWithInvalidID_ThenShouldReturnNotFound() throws Exception {
+    public void whenPutIsCalledWithInvalidID_ThenShouldReturnNotFound() throws Exception {
         URI uri = new URI("/bugs/-1");
         mockMvc.perform(put(uri)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -120,7 +120,7 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenCallingBugAPIPUTWithValidIDAndData_ThenShouldReturnOK() throws Exception {
+    public void whenPutIsCalledWithValidIDAndData_ThenShouldReturnOK() throws Exception {
         URI uri = new URI("/bugs/1");
         mockMvc.perform(put(uri)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +129,7 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenCallingBugAPIPUTWithValidIDAndData_ThenShouldReturnTheBugInfo() throws Exception {
+    public void whenPutIsCalledWithValidIDAndData_ThenShouldReturnTheBugInfo() throws Exception {
         URI uri = new URI("/bugs/1");
         mockMvc.perform(put(uri)
                         .contentType(MediaType.APPLICATION_JSON)
