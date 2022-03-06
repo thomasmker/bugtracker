@@ -1,6 +1,7 @@
 package com.thomashayashi.bugtracker.controller;
 
 import com.thomashayashi.bugtracker.controller.dto.BugDto;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.net.URI;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -21,26 +25,33 @@ public class BugsControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void whenBugAPICalled_ThenShouldReturnStatus200() throws Exception {
+    public void whenBugAPIGETIsCalled_ThenShouldReturnStatus200() throws Exception {
         URI uri = new URI("/bugs");
-
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get(uri))
-                .andExpect(MockMvcResultMatchers
-                        .status()
-                        .is(200));
+        mockMvc.perform(get(uri)).andExpect(status().isOk());
     }
 
     @Test
-    public void whenBugAPICalled_ThenShouldReturnBugInformation() throws Exception {
+    public void whenBugAPIGETIsCalled_ThenShouldReturnListOfBugs() throws Exception {
         URI uri = new URI("/bugs");
 
-        mockMvc.perform(MockMvcRequestBuilders
-                        .get(uri))
-                .andExpect(MockMvcResultMatchers
-                        .status().isOk())
-                .andExpect(MockMvcResultMatchers
-                        .content()
-                        .string("[{\"id\":1,\"title\":\"a\",\"description\":\"b\"},{\"id\":1,\"title\":\"a\",\"description\":\"b\"}]"));
+        mockMvc.perform(get(uri))
+                .andExpect(content().string("[{\"id\":1,\"title\":\"a\"},{\"id\":1,\"title\":\"a\"}]"));
+    }
+
+    @Test
+    public void whenCallingBugAPIGETWithIDIs_ThenShouldReturnTheBugWithThatID() throws Exception {
+        URI uri = new URI("/bugs/1");
+
+        mockMvc.perform(get(uri))
+                .andExpect(status().isOk())
+                .andExpect(content()
+                        .string("{\"id\":1,\"title\":\"a\",\"description\":\"b\"}"));
+    }
+
+    @Test
+    public void whenCallingBugAPIGETWithInvalidID_ThenShouldReturnNotFound() throws Exception {
+        URI uri = new URI("/bugs/-1");
+
+        mockMvc.perform(get(uri)).andExpect(status().isNotFound());
     }
 }
