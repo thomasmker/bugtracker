@@ -3,10 +3,7 @@ package com.thomashayashi.bugtracker.controller;
 import com.thomashayashi.bugtracker.controller.dto.BugDetailsDto;
 import com.thomashayashi.bugtracker.controller.dto.BugDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,7 +14,7 @@ import java.util.List;
 public class BugsController {
 
     @GetMapping
-    public List<BugDto> bugList() {
+    public List<BugDto> getBugs() {
         BugDto bug = new BugDto();
         bug.setId(1L);
         bug.setTitle("a");
@@ -26,7 +23,7 @@ public class BugsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BugDetailsDto> bugDetails(@PathVariable("id") Long id)
+    public ResponseEntity<BugDetailsDto> getBugDetails(@PathVariable("id") Long id)
     {
         if(id == 1) {
             BugDetailsDto bug = new BugDetailsDto();
@@ -35,6 +32,15 @@ public class BugsController {
             bug.setDescription("b");
             return ResponseEntity.ok(bug);
         }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBug(@PathVariable("id") Long id)
+    {
+        if(id == 1)
+            return ResponseEntity.ok().build();
 
         return ResponseEntity.notFound().build();
     }
