@@ -3,7 +3,6 @@ package com.thomashayashi.bugtracker.controller;
 import com.thomashayashi.bugtracker.mock.BugFormMock;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -103,5 +102,38 @@ public class BugsControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(BugFormMock.getBugForm()))
                 .andExpect(redirectedUrlPattern("**/bugs/{[0-9]+}"));
+    }
+
+    @Test
+    public void whenCallingBugAPIPUTWithNoData_ThenShouldReturnBadRequest() throws Exception {
+        URI uri = new URI("/bugs/1");
+        mockMvc.perform(put(uri)).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void whenCallingBugAPIPUTWithInvalidID_ThenShouldReturnNotFound() throws Exception {
+        URI uri = new URI("/bugs/-1");
+        mockMvc.perform(put(uri)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"description\":\"b\"}"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void whenCallingBugAPIPUTWithValidIDAndData_ThenShouldReturnOK() throws Exception {
+        URI uri = new URI("/bugs/1");
+        mockMvc.perform(put(uri)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"description\":\"b\"}"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void whenCallingBugAPIPUTWithValidIDAndData_ThenShouldReturnTheBugInfo() throws Exception {
+        URI uri = new URI("/bugs/1");
+        mockMvc.perform(put(uri)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"description\":\"b\"}"))
+                .andExpect(content().string(containsString("{\"id\":1,\"title\":")));
     }
 }
