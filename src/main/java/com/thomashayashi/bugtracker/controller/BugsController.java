@@ -2,10 +2,13 @@ package com.thomashayashi.bugtracker.controller;
 
 import com.thomashayashi.bugtracker.controller.dto.BugDetailsDto;
 import com.thomashayashi.bugtracker.controller.dto.BugDto;
+import com.thomashayashi.bugtracker.controller.form.BugForm;
+import com.thomashayashi.bugtracker.model.Bug;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,6 +37,16 @@ public class BugsController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    public ResponseEntity<BugDto> createBug(@RequestBody BugForm form, UriComponentsBuilder uriBuilder)
+    {
+        Bug bug = form.convert();
+        //Save bug
+        bug.setId(11L);
+        URI uri = uriBuilder.path("/bugs/{id}").buildAndExpand(bug.getId()).toUri();
+        return ResponseEntity.created(uri).body(new BugDto(bug));
     }
 
     @DeleteMapping("/{id}")
