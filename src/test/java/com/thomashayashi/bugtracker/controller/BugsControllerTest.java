@@ -33,18 +33,10 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenGetIsCalled_ThenShouldReturnOk() throws Exception {
-        mockMvc.perform(get(uri)).andExpect(status().isOk());
-    }
-
-    @Test
-    public void whenGetIsCalled_ThenReturnShouldBeEncodedInISO88591() throws Exception {
-        mockMvc.perform(get(uri)).andExpect(content().encoding("ISO-8859-1"));
-    }
-
-    @Test
-    public void whenGetIsCalled_ThenShouldReturnListOfBugs() throws Exception {
+    public void whenGetIsCalled_ThenShouldReturnOkEncodedInISO88591WithListOfBugs() throws Exception {
         mockMvc.perform(get(uri))
+                .andExpect(status().isOk())
+                .andExpect(content().encoding("ISO-8859-1"))
                 .andExpect(content().string("[{\"id\":1,\"title\":\"a\"},{\"id\":1,\"title\":\"a\"}]"));
     }
 
@@ -81,18 +73,11 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenPostIsCalledWithValidData_ThenShouldReturnCreated() throws Exception {
-        mockMvc.perform(post(uri)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(BugFormMock.getBugForm())
-        ).andExpect(status().isCreated());
-    }
-
-    @Test
-    public void whenPostIsCalledWithValidData_ThenShouldReturnCreatedBugInfo() throws Exception {
+    public void whenPostIsCalledWithValidData_ThenShouldReturnCreatedAndTheBugInfo() throws Exception {
         mockMvc.perform(post(uri)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(BugFormMock.getBugForm()))
+                .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("\"title\":\"a\"}")));
     }
 
@@ -120,20 +105,12 @@ public class BugsControllerTest {
     }
 
     @Test
-    public void whenPutIsCalledWithValidIDAndData_ThenShouldReturnOK() throws Exception {
+    public void whenPutIsCalledWithValidIDAndData_ThenShouldReturnOkWithTheBugInfo() throws Exception {
         URI uri = new URI("/bugs/1");
         mockMvc.perform(put(uri)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"description\":\"b\"}"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void whenPutIsCalledWithValidIDAndData_ThenShouldReturnTheBugInfo() throws Exception {
-        URI uri = new URI("/bugs/1");
-        mockMvc.perform(put(uri)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"description\":\"b\"}"))
+                .andExpect(status().isOk())
                 .andExpect(content().string(containsString("{\"id\":1,\"title\":")));
     }
 }
